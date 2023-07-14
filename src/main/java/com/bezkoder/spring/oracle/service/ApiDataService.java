@@ -36,9 +36,12 @@ public class ApiDataService {
 		defaultParameters.put("f", "pjson");
 	}
 
-	public int getCountByZonesFromMapServer2(String zone, String whereClause) {
+	public int getCountByZonesFromMapServer2(String zone, String whereClause, String geometry) {
 		Map<String, String> parameters = new LinkedHashMap<>();
 		parameters.put("where", whereClause);
+		if (geometry != null) {
+			parameters.put("geometry", geometry);
+		}
 		parameters.putAll(defaultParameters);
 		String content = httpApiClient.mapServer2Query(zone, parameters);
 		ApiResult result = stringToObject(content);
@@ -46,9 +49,12 @@ public class ApiDataService {
 		return result.getCount();
 	}
 
-	public int getCountByZonesFromMapServer8(String zone, String whereClause) {
+	public int getCountByZonesFromMapServer8(String zone, String whereClause, String geometry) {
 		Map<String, String> parameters = new LinkedHashMap<>();
 		parameters.put("where", whereClause);
+		if (geometry != null) {
+			parameters.put("geometry", geometry);
+		}
 		parameters.putAll(defaultParameters);
 		String content = httpApiClient.mapServer8Query(zone, parameters);
 		ApiResult result = stringToObject(content);
@@ -56,20 +62,25 @@ public class ApiDataService {
 		return result.getCount();
 	}
 
-	public int getCountByZonesFromMapServer1(String zone, String whereClause) {
+	public int getCountByZonesFromMapServer1(String zone, String whereClause, String geometry) {
 		Map<String, String> parameters = new LinkedHashMap<>();
 		parameters.put("where", whereClause);
+		if (geometry != null) {
+			parameters.put("geometry", geometry);
+		}
 		parameters.putAll(defaultParameters);
 		String content = httpApiClient.mapServer1Query(zone, parameters);
 		ApiResult result = stringToObject(content);
 		log.debug("Result: {}", result);
 		return result.getCount();
 	}
-	
-	
-	public int getCountByZonesFromMapServer3(String zone, String whereClause) {
+
+	public int getCountByZonesFromMapServer3(String zone, String whereClause, String geometry) {
 		Map<String, String> parameters = new LinkedHashMap<>();
 		parameters.put("where", whereClause);
+		if (geometry != null) {
+			parameters.put("geometry", geometry);
+		}
 		parameters.putAll(defaultParameters);
 		String content = httpApiClient.mapServer3Query(zone, parameters);
 		ApiResult result = stringToObject(content);

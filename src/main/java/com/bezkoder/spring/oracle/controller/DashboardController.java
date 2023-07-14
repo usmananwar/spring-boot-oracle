@@ -1,13 +1,17 @@
 package com.bezkoder.spring.oracle.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bezkoder.spring.oracle.service.DashboardDataService;
 import com.bezkoder.spring.oracle.service.PillerDataService;
 import com.bezkoder.spring.oracle.service.PoleDataService;
 import com.bezkoder.spring.oracle.service.StationsDataService;
@@ -34,28 +38,86 @@ public class DashboardController {
 	@Autowired
 	PillerDataService pillerDataService;
 
+	@Autowired
+	DashboardDataService dashboardDataService;
+
+	/**
+	 * 
+	 * Sample request URL:
+	 * http://localhost:8080/dashboard/getDataByZones?isZoneOne=true&isZoneTwo=true&isZoneThree=true
+	 * 
+	 * 
+	 * @param isZoneOne
+	 * @param isZoneTwo
+	 * @param isZoneThree
+	 * @return
+	 */
 	@GetMapping("/getDataByZones")
-	public ResponseEntity<?> getDataByZones() {
-		int dssGmtCount = transformerDataService.getDssGmtCount(true, true, true);
-		int dssPmtCount = transformerDataService.getDssPmtCount(true, true, true);
-		int powerTransformer = transformerDataService.getPowerTransformerCount(true, true, true);
-		int stationTransformer = transformerDataService.getStationTransformerCount(true, true, true);
-		log.debug("GMT:{}, PMT: {}, POWER: {}, STATION: {}", dssGmtCount, dssPmtCount, powerTransformer, stationTransformer);
+	public ResponseEntity<?> getDataByZones(@RequestParam(required = true) boolean isZoneOne, @RequestParam(required = true) boolean isZoneTwo, @RequestParam(required = true) boolean isZoneThree) {
 
-		int gridCount = stationsDataService.getGridCount(true, true, true);
-		int primaryCount = stationsDataService.getPrimaryCount(true, true, true);
-		int distributionCount = stationsDataService.getDistributionCount(true, true, true);
-		log.debug("GRID :{}, PRIMARY : {}, DISTRIBUTION: {}", gridCount, primaryCount, distributionCount);
+		log.info("Received parameters; isZoneOne: {}, isZoneTwo: {}, isZoneThree: {}", isZoneOne, isZoneTwo, isZoneThree);
 
-		int poleCount = poleDataService.getPoleCount(true, true, true);
-		log.debug("POLE :{}", poleCount);
+		int dssGmtCount = transformerDataService.getDssGmtCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int dssPmtCount = transformerDataService.getDssPmtCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int powerTransfomerCount = transformerDataService.getPowerTransformerCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int stationTransformerCount = transformerDataService.getStationTransformerCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		Map<String, Integer> transformersMap = dashboardDataService.prepareTransformerObject(dssGmtCount, dssPmtCount, powerTransfomerCount, stationTransformerCount);
 
-		int mainFeederPillerCount = pillerDataService.getMainFeederPillarCount(true, true, true);
-		int miniFeederPillerCount = pillerDataService.getMiniFeederPillarCount(true, true, true);
-		int cutoutBoxCount = pillerDataService.getCutOutBoxCount(true, true, true);
-		log.debug("Main Feeder Piller :{}, Mini Feeder Piller: {}, Cutout Box: {}", mainFeederPillerCount, miniFeederPillerCount, cutoutBoxCount);
+		int gridCount = stationsDataService.getGridCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int primaryCount = stationsDataService.getPrimaryCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int distributionCount = stationsDataService.getDistributionCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		Map<String, Integer> stationsMap = dashboardDataService.prepareStationMap(gridCount, primaryCount, distributionCount);
 
-		return new ResponseEntity<String>("ABC", HttpStatus.OK);
+		int poleCount = poleDataService.getPoleCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		Map<String, Integer> poleMap = dashboardDataService.preparePoleMap(poleCount);
+
+		int mainFeederPillerCount = pillerDataService.getMainFeederPillarCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int miniFeederPillerCount = pillerDataService.getMiniFeederPillarCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int cutoutBoxCount = pillerDataService.getCutOutBoxCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		Map<String, Integer> pillarMap = dashboardDataService.preparePillarMap(mainFeederPillerCount, miniFeederPillerCount, cutoutBoxCount);
+
+		Map<String, Map<String, Integer>> result = dashboardDataService.prepareResult(transformersMap, stationsMap, poleMap, pillarMap, null, null);
+		log.info("Result: {}", result);
+		return new ResponseEntity<Map<String, Map<String, Integer>>>(result, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * Sample request URL: http://localhost:8080/dashboard/getDataByGeometry?xmin=290756.7708&ymin=1981491.5853&xmax=687769.4381&ymax=2377919.7326
+	 * 
+	 * 
+	 * @param isZoneOne
+	 * @param isZoneTwo
+	 * @param isZoneThree
+	 * @return
+	 */
+	@GetMapping("/getDataByGeometry")
+	public ResponseEntity<?> getDataByZones(@RequestParam(required = true) Double xmin, @RequestParam(required = true) Double ymin, @RequestParam(required = true) Double xmax, @RequestParam(required = true) Double ymax) {
+
+		log.info("Received parameters; xmin: {}, ymin: {}, xmax: {}, ymax: {}", xmin, ymin, xmax, ymax);
+
+		int dssGmtCount = transformerDataService.getDssGmtCountByGeometry(xmin, ymin, xmax, ymax);
+		int dssPmtCount = transformerDataService.getDssPmtCountByGeometry(xmin, ymin, xmax, ymax);
+		int powerTransfomerCount = transformerDataService.getPowerTransformerCountByGeometry(xmin, ymin, xmax, ymax);
+		int stationTransformerCount = transformerDataService.getStationTransformerCountByGeometry(xmin, ymin, xmax, ymax);
+		Map<String, Integer> transformersMap = dashboardDataService.prepareTransformerObject(dssGmtCount, dssPmtCount, powerTransfomerCount, stationTransformerCount);
+
+		int gridCount = stationsDataService.getGridCountByGeometry(xmin, ymin, xmax, ymax);
+		int primaryCount = stationsDataService.getPrimaryCountByGeometry(xmin, ymin, xmax, ymax);
+		int distributionCount = stationsDataService.getDistributionCountByGeometry(xmin, ymin, xmax, ymax);
+		Map<String, Integer> stationsMap = dashboardDataService.prepareStationMap(gridCount, primaryCount, distributionCount);
+
+		int poleCount = poleDataService.getPoleCountByGeometry(xmin, ymin, xmax, ymax);
+		Map<String, Integer> poleMap = dashboardDataService.preparePoleMap(poleCount);
+
+		int mainFeederPillerCount = pillerDataService.getMainFeederPillarCountByGeometry(xmin, ymin, xmax, ymax);
+		int miniFeederPillerCount = pillerDataService.getMiniFeederPillarCountByGeometry(xmin, ymin, xmax, ymax);
+		int cutoutBoxCount = pillerDataService.getCutOutBoxCountByGeometry(xmin, ymin, xmax, ymax);
+		Map<String, Integer> pillarMap = dashboardDataService.preparePillarMap(mainFeederPillerCount, miniFeederPillerCount, cutoutBoxCount);
+
+		Map<String, Map<String, Integer>> result = dashboardDataService.prepareResult(transformersMap, stationsMap, poleMap, pillarMap, null, null);
+		log.info("Result: {}", result);
+		return new ResponseEntity<Map<String, Map<String, Integer>>>(result, HttpStatus.OK);
 	}
 
 }
