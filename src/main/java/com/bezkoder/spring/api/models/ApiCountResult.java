@@ -1,4 +1,4 @@
-package com.bezkoder.spring.oracle.model;
+package com.bezkoder.spring.api.models;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ApiResult {
+public class ApiCountResult {
 	int count;
 }

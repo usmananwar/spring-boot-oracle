@@ -16,12 +16,4 @@ public interface HttpApiClient {
 	@RequestMapping(method = RequestMethod.GET, value = "/{zone}/MapServer/{mapServerId}/query")
 	String mapServerQuery(@PathVariable("zone") String zone, @PathVariable("mapServerId") String mapServerId, @SpringQueryMap Map<String, String> parameters);
 
-//	@RequestMapping(method = RequestMethod.GET, value = "/{zone}/MapServer/8/query")
-//	String mapServer8Query(@PathVariable("zone") String zone, @SpringQueryMap Map<String, String> parameters);
-//
-//	@RequestMapping(method = RequestMethod.GET, value = "/{zone}/MapServer/1/query")
-//	String mapServer1Query(@PathVariable("zone") String zone, @SpringQueryMap Map<String, String> parameters);
-//
-//	@RequestMapping(method = RequestMethod.GET, value = "/{zone}/MapServer/3/query")
-//	String mapServer3Query(@PathVariable("zone") String zone, @SpringQueryMap Map<String, String> parameters);
 }

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class DashboardDataService {
 
-	public Map<String, Integer> prepareTransformerObject(int dssGmtCount, int dssPmtCount, int powerTransfomerCount, int stationTransformerCount) {
-		Map<String, Integer> transformerMap = new LinkedHashMap<>();
+	public Map<String, Object> prepareTransformerObject(int dssGmtCount, int dssPmtCount, int powerTransfomerCount, int stationTransformerCount) {
+		Map<String, Object> transformerMap = new LinkedHashMap<>();
 		transformerMap.put("dss_gmt", dssGmtCount);
 		transformerMap.put("dss_pmt", dssPmtCount);
 		transformerMap.put("power_transformer", powerTransfomerCount);
@@ -17,46 +17,46 @@ public class DashboardDataService {
 		return transformerMap;
 	}
 
-	public Map<String, Integer> prepareStationMap(int gridCount, int primaryCount, int distributionCount) {
-		Map<String, Integer> stationMap = new LinkedHashMap<>();
+	public Map<String, Object> prepareStationMap(int gridCount, int primaryCount, int distributionCount) {
+		Map<String, Object> stationMap = new LinkedHashMap<>();
 		stationMap.put("grid", gridCount);
 		stationMap.put("primary", primaryCount);
 		stationMap.put("distribution", distributionCount);
 		return stationMap;
 	}
 
-	public Map<String, Integer> preparePoleMap(int poleCount) {
-		Map<String, Integer> poleMap = new LinkedHashMap<>();
+	public Map<String, Object> preparePoleMap(int poleCount) {
+		Map<String, Object> poleMap = new LinkedHashMap<>();
 		poleMap.put("pole", poleCount);
 		return poleMap;
 	}
 
-	public Map<String, Integer> preparePillarMap(int mainFeederPillarCount, int miniFeederPillarCount, int cutoutBoxCount) {
-		Map<String, Integer> stationMap = new LinkedHashMap<>();
+	public Map<String, Object> preparePillarMap(int mainFeederPillarCount, int miniFeederPillarCount, int cutoutBoxCount) {
+		Map<String, Object> stationMap = new LinkedHashMap<>();
 		stationMap.put("main_feeder_pillar", mainFeederPillarCount);
 		stationMap.put("mini_feeder_pillar", miniFeederPillarCount);
 		stationMap.put("cutout_box", cutoutBoxCount);
 		return stationMap;
 	}
 
-	public Map<String, Integer> prepareOverhead(int thirtyThreeKvCount, int elevenKvCount, int oneKvCount) {
-		Map<String, Integer> pillarMap = new LinkedHashMap<>();
+	public Map<String, Object> prepareOverhead(double thirtyThreeKvCount, double elevenKvCount, double oneKvCount) {
+		Map<String, Object> pillarMap = new LinkedHashMap<>();
 		pillarMap.put("33kv", thirtyThreeKvCount);
 		pillarMap.put("11kv", elevenKvCount);
 		pillarMap.put("1kv", oneKvCount);
 		return pillarMap;
 	}
 
-	public Map<String, Integer> prepareUndergroundMap(int thirtyThreeKvCount, int elevenKvCount, int lowVoltageCount) {
-		Map<String, Integer> undergroundMap = new LinkedHashMap<>();
+	public Map<String, Object> prepareUndergroundMap(int thirtyThreeKvCount, int elevenKvCount, int lowVoltageCount) {
+		Map<String, Object> undergroundMap = new LinkedHashMap<>();
 		undergroundMap.put("33kv", thirtyThreeKvCount);
 		undergroundMap.put("11kv", elevenKvCount);
 		undergroundMap.put("lv", lowVoltageCount);
 		return undergroundMap;
 	}
 
-	public Map<String, Map<String, Integer>> prepareResult(Map<String, Integer> transformerMap, Map<String, Integer> stationMap, Map<String, Integer> poleMap, Map<String, Integer> pillarMap, Map<String, Integer> overheadMap, Map<String, Integer> undergroundMap) {
-		Map<String, Map<String, Integer>> result = new LinkedHashMap<>();
+	public Map<String, Map<String, Object>> prepareResult(Map<String, Object> transformerMap, Map<String, Object> stationMap, Map<String, Object> poleMap, Map<String, Object> pillarMap, Map<String, Object> overheadMap, Map<String, Object> undergroundMap) {
+		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
 		result.put("transformer", transformerMap);
 		result.put("station", stationMap);
 		result.put("pole", poleMap);
