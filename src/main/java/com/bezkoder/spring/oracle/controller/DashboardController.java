@@ -65,24 +65,24 @@ public class DashboardController {
 
 		log.info("Received parameters; isZoneOne: {}, isZoneTwo: {}, isZoneThree: {}", isZoneOne, isZoneTwo, isZoneThree);
 
-//		int dssGmtCount = transformerDataService.getDssGmtCountByZone(isZoneOne, isZoneTwo, isZoneThree);
-//		int dssPmtCount = transformerDataService.getDssPmtCountByZone(isZoneOne, isZoneTwo, isZoneThree);
-//		int powerTransfomerCount = transformerDataService.getPowerTransformerCountByZone(isZoneOne, isZoneTwo, isZoneThree);
-//		int stationTransformerCount = transformerDataService.getStationTransformerCountByZone(isZoneOne, isZoneTwo, isZoneThree);
-//		Map<String, Object> transformersMap = dashboardDataService.prepareTransformerObject(dssGmtCount, dssPmtCount, powerTransfomerCount, stationTransformerCount);
-//
-//		int gridCount = stationsDataService.getGridCountByZone(isZoneOne, isZoneTwo, isZoneThree);
-//		int primaryCount = stationsDataService.getPrimaryCountByZone(isZoneOne, isZoneTwo, isZoneThree);
-//		int distributionCount = stationsDataService.getDistributionCountByZone(isZoneOne, isZoneTwo, isZoneThree);
-//		Map<String, Object> stationsMap = dashboardDataService.prepareStationMap(gridCount, primaryCount, distributionCount);
-//
-//		int poleCount = poleDataService.getPoleCountByZone(isZoneOne, isZoneTwo, isZoneThree);
-//		Map<String, Object> poleMap = dashboardDataService.preparePoleMap(poleCount);
-//
-//		int mainFeederPillerCount = pillerDataService.getMainFeederPillarCountByZone(isZoneOne, isZoneTwo, isZoneThree);
-//		int miniFeederPillerCount = pillerDataService.getMiniFeederPillarCountByZone(isZoneOne, isZoneTwo, isZoneThree);
-//		int cutoutBoxCount = pillerDataService.getCutOutBoxCountByZone(isZoneOne, isZoneTwo, isZoneThree);
-//		Map<String, Object> pillarMap = dashboardDataService.preparePillarMap(mainFeederPillerCount, miniFeederPillerCount, cutoutBoxCount);
+		int dssGmtCount = transformerDataService.getDssGmtCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int dssPmtCount = transformerDataService.getDssPmtCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int powerTransfomerCount = transformerDataService.getPowerTransformerCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int stationTransformerCount = transformerDataService.getStationTransformerCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		Map<String, Object> transformersMap = dashboardDataService.prepareTransformerObject(dssGmtCount, dssPmtCount, powerTransfomerCount, stationTransformerCount);
+
+		int gridCount = stationsDataService.getGridCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int primaryCount = stationsDataService.getPrimaryCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int distributionCount = stationsDataService.getDistributionCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		Map<String, Object> stationsMap = dashboardDataService.prepareStationMap(gridCount, primaryCount, distributionCount);
+
+		int poleCount = poleDataService.getPoleCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		Map<String, Object> poleMap = dashboardDataService.preparePoleMap(poleCount);
+
+		int mainFeederPillerCount = pillerDataService.getMainFeederPillarCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int miniFeederPillerCount = pillerDataService.getMiniFeederPillarCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int cutoutBoxCount = pillerDataService.getCutOutBoxCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		Map<String, Object> pillarMap = dashboardDataService.preparePillarMap(mainFeederPillerCount, miniFeederPillerCount, cutoutBoxCount);
 
 		double overhead33KvCount = overheadDataService.getThrityThreeKvCountByZone(isZoneOne, isZoneTwo, isZoneThree);
 		double overhead11KvCount = overheadDataService.getElevenKvCountByZone(isZoneOne, isZoneTwo, isZoneThree);
@@ -94,11 +94,8 @@ public class DashboardController {
 		double undergroud1VCount = undergroundDataService.getOneVCountByZone(isZoneOne, isZoneTwo, isZoneThree);
 		Map<String, Object> undergroundMap = dashboardDataService.prepareOverhead(undergroud33KvCount, undergroud11KvCount, undergroud1VCount);
 
-		// Map<String, Map<String, Object>> result =
-		// dashboardDataService.prepareResult(transformersMap, stationsMap, poleMap,
-		// pillarMap, overheadMap, undergroundMap);
+		Map<String, Map<String, Object>> result = dashboardDataService.prepareResult(transformersMap, stationsMap, poleMap, pillarMap, overheadMap, undergroundMap);
 
-		Map<String, Map<String, Object>> result = dashboardDataService.prepareResult(null, null, null, null, overheadMap, undergroundMap);
 		log.info("Result: {}", result);
 		return new ResponseEntity<Map<String, Map<String, Object>>>(result, HttpStatus.OK);
 	}
