@@ -39,7 +39,7 @@ public class DashboardDataService {
 		return stationMap;
 	}
 
-	public Map<String, Integer> overhead(int thirtyThreeKvCount, int elevenKvCount, int oneKvCount) {
+	public Map<String, Integer> prepareOverhead(int thirtyThreeKvCount, int elevenKvCount, int oneKvCount) {
 		Map<String, Integer> pillarMap = new LinkedHashMap<>();
 		pillarMap.put("33kv", thirtyThreeKvCount);
 		pillarMap.put("11kv", elevenKvCount);

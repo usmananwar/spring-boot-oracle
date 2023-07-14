@@ -37,52 +37,45 @@ public class ApiDataService {
 	}
 
 	public int getCountByZonesFromMapServer2(String zone, String whereClause, String geometry) {
-		Map<String, String> parameters = new LinkedHashMap<>();
-		parameters.put("where", whereClause);
-		if (geometry != null) {
-			parameters.put("geometry", geometry);
-		}
-		parameters.putAll(defaultParameters);
-		String content = httpApiClient.mapServer2Query(zone, parameters);
-		ApiResult result = stringToObject(content);
-		log.debug("Result: {}", result);
-		return result.getCount();
+		return getCountByZonesFromMapServer(zone, "2", whereClause, geometry);
 	}
 
 	public int getCountByZonesFromMapServer8(String zone, String whereClause, String geometry) {
-		Map<String, String> parameters = new LinkedHashMap<>();
-		parameters.put("where", whereClause);
-		if (geometry != null) {
-			parameters.put("geometry", geometry);
-		}
-		parameters.putAll(defaultParameters);
-		String content = httpApiClient.mapServer8Query(zone, parameters);
-		ApiResult result = stringToObject(content);
-		log.debug("Result: {}", result);
-		return result.getCount();
+		return getCountByZonesFromMapServer(zone, "8", whereClause, geometry);
 	}
 
 	public int getCountByZonesFromMapServer1(String zone, String whereClause, String geometry) {
-		Map<String, String> parameters = new LinkedHashMap<>();
-		parameters.put("where", whereClause);
-		if (geometry != null) {
-			parameters.put("geometry", geometry);
-		}
-		parameters.putAll(defaultParameters);
-		String content = httpApiClient.mapServer1Query(zone, parameters);
-		ApiResult result = stringToObject(content);
-		log.debug("Result: {}", result);
-		return result.getCount();
+		return getCountByZonesFromMapServer(zone, "1", whereClause, geometry);
 	}
 
 	public int getCountByZonesFromMapServer3(String zone, String whereClause, String geometry) {
+		return getCountByZonesFromMapServer(zone, "3", whereClause, geometry);
+	}
+
+	public int getCountByZonesFromMapServer5(String zone, String whereClause, String geometry) {
+		return getCountByZonesFromMapServer(zone, "5", whereClause, geometry);
+	}
+
+	public int getCountByZonesFromMapServer6(String zone, String whereClause, String geometry) {
+		return getCountByZonesFromMapServer(zone, "6", whereClause, geometry);
+	}
+
+	public int getCountByZonesFromMapServer4(String zone, String whereClause, String geometry) {
+		return getCountByZonesFromMapServer(zone, "4", whereClause, geometry);
+	}
+
+	public int getCountByZonesFromMapServer7(String zone, String whereClause, String geometry) {
+		return getCountByZonesFromMapServer(zone, "7", whereClause, geometry);
+	}
+
+	public int getCountByZonesFromMapServer(String zone, String mapServerId, String whereClause, String geometry) {
 		Map<String, String> parameters = new LinkedHashMap<>();
 		parameters.put("where", whereClause);
 		if (geometry != null) {
 			parameters.put("geometry", geometry);
 		}
 		parameters.putAll(defaultParameters);
-		String content = httpApiClient.mapServer3Query(zone, parameters);
+		String content = httpApiClient.mapServerQuery(zone, mapServerId, parameters);
 		ApiResult result = stringToObject(content);
 		log.debug("Result: {}", result);
 		return result.getCount();

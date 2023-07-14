@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bezkoder.spring.oracle.service.DashboardDataService;
+import com.bezkoder.spring.oracle.service.OverheadDataService;
 import com.bezkoder.spring.oracle.service.PillerDataService;
 import com.bezkoder.spring.oracle.service.PoleDataService;
 import com.bezkoder.spring.oracle.service.StationsDataService;
 import com.bezkoder.spring.oracle.service.TransformerDataService;
+import com.bezkoder.spring.oracle.service.UndergroundDataService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,6 +39,12 @@ public class DashboardController {
 
 	@Autowired
 	PillerDataService pillerDataService;
+
+	@Autowired
+	OverheadDataService overheadDataService;
+
+	@Autowired
+	UndergroundDataService undergroundDataService;
 
 	@Autowired
 	DashboardDataService dashboardDataService;
@@ -76,14 +84,25 @@ public class DashboardController {
 		int cutoutBoxCount = pillerDataService.getCutOutBoxCountByZone(isZoneOne, isZoneTwo, isZoneThree);
 		Map<String, Integer> pillarMap = dashboardDataService.preparePillarMap(mainFeederPillerCount, miniFeederPillerCount, cutoutBoxCount);
 
-		Map<String, Map<String, Integer>> result = dashboardDataService.prepareResult(transformersMap, stationsMap, poleMap, pillarMap, null, null);
+		int overhead33KvCount = overheadDataService.getThrityThreeKvCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int overhead11KvCount = overheadDataService.getElevenKvCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int overhead1VCount = overheadDataService.getOneVCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		Map<String, Integer> overheadMap = dashboardDataService.prepareOverhead(overhead33KvCount, overhead11KvCount, overhead1VCount);
+
+		int undergroud33KvCount = undergroundDataService.getThrityThreeKvCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int undergroud11KvCount = undergroundDataService.getElevenKvCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		int undergroud1VCount = undergroundDataService.getOneVCountByZone(isZoneOne, isZoneTwo, isZoneThree);
+		Map<String, Integer> undergroundMap = dashboardDataService.prepareOverhead(undergroud33KvCount, undergroud11KvCount, undergroud1VCount);
+
+		Map<String, Map<String, Integer>> result = dashboardDataService.prepareResult(transformersMap, stationsMap, poleMap, pillarMap, overheadMap, undergroundMap);
 		log.info("Result: {}", result);
 		return new ResponseEntity<Map<String, Map<String, Integer>>>(result, HttpStatus.OK);
 	}
 
 	/**
 	 * 
-	 * Sample request URL: http://localhost:8080/dashboard/getDataByGeometry?xmin=290756.7708&ymin=1981491.5853&xmax=687769.4381&ymax=2377919.7326
+	 * Sample request URL:
+	 * http://localhost:8080/dashboard/getDataByGeometry?xmin=290756.7708&ymin=1981491.5853&xmax=687769.4381&ymax=2377919.7326
 	 * 
 	 * 
 	 * @param isZoneOne
@@ -115,7 +134,17 @@ public class DashboardController {
 		int cutoutBoxCount = pillerDataService.getCutOutBoxCountByGeometry(xmin, ymin, xmax, ymax);
 		Map<String, Integer> pillarMap = dashboardDataService.preparePillarMap(mainFeederPillerCount, miniFeederPillerCount, cutoutBoxCount);
 
-		Map<String, Map<String, Integer>> result = dashboardDataService.prepareResult(transformersMap, stationsMap, poleMap, pillarMap, null, null);
+		int overhead33KvCount = overheadDataService.getThrityThreeKvCountByGeometry(xmin, ymin, xmax, ymax);
+		int overhead11KvCount = overheadDataService.getElevenKvCountByGeometry(xmin, ymin, xmax, ymax);
+		int overhead1VCount = overheadDataService.getOneVCountByGeometry(xmin, ymin, xmax, ymax);
+		Map<String, Integer> overheadMap = dashboardDataService.prepareOverhead(overhead33KvCount, overhead11KvCount, overhead1VCount);
+
+		int undergroud33KvCount = undergroundDataService.getThrityThreeKvCountByGeometry(xmin, ymin, xmax, ymax);
+		int undergroud11KvCount = undergroundDataService.getElevenKvCountByGeometry(xmin, ymin, xmax, ymax);
+		int undergroud1VCount = undergroundDataService.getOneVCountByGeometry(xmin, ymin, xmax, ymax);
+		Map<String, Integer> undergroundMap = dashboardDataService.prepareOverhead(undergroud33KvCount, undergroud11KvCount, undergroud1VCount);
+
+		Map<String, Map<String, Integer>> result = dashboardDataService.prepareResult(transformersMap, stationsMap, poleMap, pillarMap, overheadMap, undergroundMap);
 		log.info("Result: {}", result);
 		return new ResponseEntity<Map<String, Map<String, Integer>>>(result, HttpStatus.OK);
 	}
